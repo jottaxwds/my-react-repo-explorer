@@ -32,10 +32,10 @@ const ResultsTableHead = <DataItem extends Record<string, any>>({
                 direction={sortBy === column.id ? sortOrder : SortOrderType.ASC}
                 onClick={handleSort(column.id as string)}
               >
-                {column.label}
+                {column.headerLabel}
               </TableSortLabel>
             ) : (
-              column.label
+              column.headerLabel
             )}
           </S.HeadCell>
         ))}

@@ -5,7 +5,7 @@ import { ColSizes } from '../../types/ResultsTable'
 const columnsConfig = [
   {
     id: 'name',
-    label: 'Repo Name',
+    headerLabel: 'Repo Name',
     sortable: true,
     displayValue: (repo: Repo) => {
       return <Link href={repo.url}>{repo.name}</Link>
@@ -13,14 +13,14 @@ const columnsConfig = [
   },
   {
     id: 'stars',
-    label: '🌟 Stars',
+    headerLabel: '🌟 Stars',
     sortable: true,
     displayValue: (repo: Repo) => <>🌟 {repo.stars}</>,
     minColSize: ColSizes.SM
   },
   {
     id: 'forks',
-    label: '🍴 Forks',
+    headerLabel: '🍴 Forks',
     sortable: true,
     displayValue: (repo: Repo) => <>🍴 {repo.forks}</>,
     minColSize: ColSizes.SM

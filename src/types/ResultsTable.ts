@@ -1,7 +1,7 @@
 export interface ColumnConfig<DataItem> {
   displayValue: (repo: DataItem) => JSX.Element
   id: string
-  label: string
+  headerLabel: string
   sortable: boolean
   minColSize?: ColSizes
 }
