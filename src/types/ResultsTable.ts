@@ -2,7 +2,12 @@ export interface ColumnConfig<DataItem> {
   displayValue: (repo: DataItem) => JSX.Element
   id: string
   label: string
-  sortable: boolean
+  sortable: boolean,
+  minColSize?: ColSizes
+}
+
+export enum ColSizes {
+  SM = '110px'
 }
 
 export enum SortOrderType {

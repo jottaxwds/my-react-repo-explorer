@@ -5,6 +5,7 @@ export const TotalItems = styled.span`
   font-weight: bold;
   font-size: 0.8rem;
   color: gray;
+  margin-left: 16px;
 `
 
 export const LastCell = styled(TableCell)`
@@ -18,4 +19,4 @@ export const HeadCell = styled(TableCell)`
 
 export const ResultsTable = styled.div`
   margin-top: 3rem;
-`
+`;

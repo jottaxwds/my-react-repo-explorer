@@ -24,7 +24,7 @@ const ResultsTableHead = <DataItem extends Record<string, any>>({
     <TableHead>
       <TableRow>
         {columns.map(column => (
-          <S.HeadCell key={`th-${String(column.id)}`}>
+          <S.HeadCell key={`th-${String(column.id)}`} style={column.minColSize ? { minWidth: column.minColSize } : {}}>
             {column.sortable ? (
               <TableSortLabel
                 data-testid={'head-cell'}
