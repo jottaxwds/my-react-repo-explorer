@@ -1,3 +1,5 @@
+![image](https://github.com/jottaxwds/my-react-repo-explorer/assets/35625576/23782a5a-53d9-4a7a-8f1b-8182805617a8)
+
 # Getting Started
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
