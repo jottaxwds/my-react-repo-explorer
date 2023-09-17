@@ -9,21 +9,21 @@ const columnsConfig = [
     sortable: true,
     displayValue: (repo: Repo) => {
       return <Link href={repo.url}>{repo.name}</Link>
-    },
+    }
   },
   {
     id: 'stars',
     label: '🌟 Stars',
     sortable: true,
     displayValue: (repo: Repo) => <>🌟 {repo.stars}</>,
-    minColSize: ColSizes.SM,
+    minColSize: ColSizes.SM
   },
   {
     id: 'forks',
     label: '🍴 Forks',
     sortable: true,
     displayValue: (repo: Repo) => <>🍴 {repo.forks}</>,
-    minColSize: ColSizes.SM,
+    minColSize: ColSizes.SM
   }
 ]
 

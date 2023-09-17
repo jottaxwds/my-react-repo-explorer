@@ -30,7 +30,7 @@ const Search = styled('div')(({ theme }) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     border: '1px solid gray',
-    borderRadius: '20px',
+    borderRadius: '20px'
   }
 }))
 

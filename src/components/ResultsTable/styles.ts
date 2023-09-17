@@ -19,4 +19,4 @@ export const HeadCell = styled(TableCell)`
 
 export const ResultsTable = styled.div`
   margin-top: 3rem;
-`;
+`
