@@ -75,4 +75,34 @@ describe('ReactRepos behaviour based on query responses', () => {
     const totalItems = await screen.findByTestId('total-items')
     expect(totalItems.textContent).toEqual('')
   })
+
+  it('Should show Load More button when there are more results available', async () => {
+    render(
+      <MockedProvider mocks={mocks({ repositories: queryRepositoriesResponse, hasNextPage: true })}>
+        <ReactRepos />
+      </MockedProvider>
+    )
+    const loadMore = await screen.findByTestId('load-more')
+    expect(loadMore).toBeInTheDocument()
+  })
+
+  it('Should NOT show Load More button if there are NOT more results available', () => {
+    render(
+      <MockedProvider mocks={mocks({ repositories: queryRepositoriesResponse, hasNextPage: false })}>
+        <ReactRepos />
+      </MockedProvider>
+    )
+    const loadMore = screen.queryByTestId('load-more')
+    expect(loadMore).not.toBeInTheDocument()
+  })
+
+  it('Should show error alert when theres an error in the query', async () => {
+    render(
+      <MockedProvider mocks={mocks({ repositories: [], hasNextPage: false, hasError: true })}>
+        <ReactRepos />
+      </MockedProvider>
+    )
+    const errorAlert = await screen.findByTestId('alert-error')
+    expect(errorAlert).toBeInTheDocument()
+  })
 })

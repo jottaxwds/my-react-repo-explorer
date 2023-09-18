@@ -86,25 +86,37 @@ export const repositoriesDefaultData = [
 export interface GetMocksProps {
   repositories: RepositoriesFragment[]
   hasNextPage: boolean
+  hasError?: boolean
 }
 
-export const mocks = ({ repositories, hasNextPage }: GetMocksProps) => [
-  {
-    request: {
-      query: REACT_REPOSITORIES_QUERY,
-      variables: { queryString: 'topic:ReactJS  language:javascript sort:repo-desc', first: 10 }
-    },
-    result: {
-      data: {
-        search: {
-          nodes: [...repositories],
-          repositoryCount: 15,
-          pageInfo: {
-            hasNextPage,
-            endCursor: hasNextPage ? 11 : null
+export const mocks = ({ repositories, hasNextPage, hasError = false }: GetMocksProps) =>
+  hasError
+    ? [
+        {
+          request: {
+            query: REACT_REPOSITORIES_QUERY,
+            variables: { queryString: 'topic:ReactJS  language:javascript sort:repo-desc', first: 10 }
+          },
+          errors: new Error('error')
+        }
+      ]
+    : [
+        {
+          request: {
+            query: REACT_REPOSITORIES_QUERY,
+            variables: { queryString: 'topic:ReactJS  language:javascript sort:repo-desc', first: 10 }
+          },
+          result: {
+            data: {
+              search: {
+                nodes: [...repositories],
+                repositoryCount: 20,
+                pageInfo: {
+                  hasNextPage,
+                  endCursor: hasNextPage ? 11 : null
+                }
+              }
+            }
           }
         }
-      }
-    }
-  }
-]
+      ]
