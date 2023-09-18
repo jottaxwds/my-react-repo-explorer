@@ -4,6 +4,9 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## First steps:
+ - A GitHub Token should be provided in a `.env` file  that should be included on the root folder of the project (check `.env.example` to see how the `.env` file should be created). [See how to get your own GitHub Token here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+
 ## Available Scripts
 
 In the project directory, you can run:
