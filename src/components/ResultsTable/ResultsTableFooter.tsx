@@ -13,7 +13,7 @@ const ResultsTableFooter = <DataItem extends Record<string, any>>({
   <TableFooter>
     {isLoading && (
       <TableRow>
-        <S.LastCell colSpan={columns.length} align={'center'}>
+        <S.LastCell data-testid={'loading-row'} colSpan={columns.length} align={'center'}>
           Loading...
         </S.LastCell>
       </TableRow>

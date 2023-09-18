@@ -10,7 +10,7 @@ const ResultsTableBody = <DataItem extends Record<string, any>>({
     <TableBody>
       {items.length ? (
         items.map((item, index) => (
-          <TableRow key={index}>
+          <TableRow key={index} data-testid={'table-row'}>
             {columns.map(column => (
               <TableCell key={`tc-${String(column.id)}`}>{column.displayValue(item)}</TableCell>
             ))}

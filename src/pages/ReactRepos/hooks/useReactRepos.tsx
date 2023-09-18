@@ -58,7 +58,7 @@ const useReactRepos = () => {
                 id: uniqueId(),
                 name: repo.name,
                 url: repo.url,
-                stars: repo.stargazers.totalCount,
+                stars: repo.stargazers?.totalCount ?? 0,
                 forks: repo.forkCount
               }
             })
@@ -73,7 +73,6 @@ const useReactRepos = () => {
       }))
     }
   })
-
   useEffect(() => {
     setRepositoriesState(prevRepositoriesState => ({
       ...prevRepositoriesState,
@@ -118,7 +117,6 @@ const useReactRepos = () => {
       ...prevRepositoriesState,
       searchValue
     }))
-
   return {
     repositoriesState,
     error,

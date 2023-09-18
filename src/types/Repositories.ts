@@ -1,3 +1,4 @@
+import { Repository } from '../codegen/generated'
 import { SortOrderType } from './ResultsTable'
 export interface RepositoriesState {
   repositories: Repo[]
@@ -22,3 +23,5 @@ export interface Repo {
   stars: number
   url: string
 }
+
+export type RepositoriesFragment = Pick<Repository, 'name' | 'stargazers' | 'forkCount' | 'url'>

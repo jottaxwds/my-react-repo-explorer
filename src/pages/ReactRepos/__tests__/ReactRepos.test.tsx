@@ -1,143 +1,78 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import useReactRepos from '../hooks/useReactRepos'
-import { repositoriesDefaultData } from '../Mocks/repositories-sample-data'
+import { MockedProvider } from '@apollo/client/testing'
+import { render, screen } from '@testing-library/react'
 import ReactRepos from '../ReactRepos'
+import { mocks, queryRepositoriesResponse } from '../__mocks__/repositories-sample-data'
 
-jest.mock('../hooks/useReactRepos')
-
-const defaultHookOutput = {
-  repositoriesState: {
-    hasNextPage: false,
-    repositories: [],
-    sortBy: 'name',
-    sortOrder: 'asc',
-    searchValue: '',
-    totalItems: 0
-  },
-  error: undefined,
-  loading: false,
-  onSortChange: jest.fn(),
-  onSearchValueChange: jest.fn(),
-  onLoadMore: jest.fn()
-}
-
-describe('ReactRepos page', () => {
-  afterEach(() => {
-    jest.clearAllMocks()
-    jest.useRealTimers()
+describe('ReactRepos behaviour based on query responses', () => {
+  it('Should show no-results row when no results are retrieved', async () => {
+    render(
+      <MockedProvider mocks={mocks({ repositories: queryRepositoriesResponse, hasNextPage: true })} addTypename>
+        <ReactRepos />
+      </MockedProvider>
+    )
+    const loadMore = await screen.findByTestId('loading-row')
+    expect(loadMore).toBeInTheDocument()
   })
 
-  describe('General behaviour', () => {
-    it('Should show no-results message when results table is empty', () => {
-      ;(useReactRepos as jest.Mock).mockReturnValue({ ...defaultHookOutput })
-      render(<ReactRepos />)
-      expect(screen.queryByText('No Results')).toBeInTheDocument()
-    })
-
-    it('Should NOT show no-results message when results table is NOT empty', () => {
-      ;(useReactRepos as jest.Mock).mockReturnValue({
-        ...defaultHookOutput,
-        repositoriesState: {
-          ...defaultHookOutput.repositoriesState,
-          repositories: repositoriesDefaultData
-        }
-      })
-      render(<ReactRepos />)
-      expect(screen.queryByText('No Results')).not.toBeInTheDocument()
-    })
-
-    it('Shows an error message when there is an error', () => {
-      ;(useReactRepos as jest.Mock).mockReturnValue({ ...defaultHookOutput })
-      const errorMessage = 'There was an error getting results... try again!'
-      render(<ReactRepos />)
-      expect(screen.queryByText(errorMessage)).not.toBeInTheDocument()
-      // Simulate an error
-      ;(useReactRepos as jest.Mock).mockReturnValue({ ...defaultHookOutput, error: 'error!' })
-
-      render(<ReactRepos />)
-      expect(screen.getByText(errorMessage)).toBeInTheDocument()
-    })
-
-    it('Should triggers `onSearchValueChange` after some time when `search-input` changes its value', () => {
-      jest.useFakeTimers()
-      const onSearchValueChangeMock = jest.fn()
-      ;(useReactRepos as jest.Mock).mockReturnValue({
-        ...defaultHookOutput,
-        onSearchValueChange: onSearchValueChangeMock
-      })
-      render(<ReactRepos />)
-      fireEvent.change(screen.getByTestId('search-input'), { target: { value: 'react' } })
-      jest.runAllTimers()
-      expect(onSearchValueChangeMock).toHaveBeenCalledWith('react')
-    })
+  it('Should show loading row when is loading repositories', async () => {
+    render(
+      <MockedProvider mocks={mocks({ repositories: queryRepositoriesResponse, hasNextPage: true })} addTypename>
+        <ReactRepos />
+      </MockedProvider>
+    )
+    const loadMore = await screen.findByTestId('loading-row')
+    expect(loadMore).toBeInTheDocument()
   })
 
-  describe('Sorting behaviour', () => {
-    it('Should triggers `onSortChange` when a sortable header is clicked', () => {
-      const onSortChangeMock = jest.fn()
-      ;(useReactRepos as jest.Mock).mockReturnValue({ ...defaultHookOutput, onSortChange: onSortChangeMock })
-      render(<ReactRepos />)
-      const nameHeadCell = screen.queryAllByTestId('head-cell')[0]
-      fireEvent.click(nameHeadCell)
-      expect(onSortChangeMock).toHaveBeenCalledWith('name', 'asc')
-    })
-
-    it('Should change column sort order when clicked on the same column header:', () => {
-      const onSortChangeMock = jest.fn()
-      ;(useReactRepos as jest.Mock).mockReturnValue({ ...defaultHookOutput, onSortChange: onSortChangeMock })
-      render(<ReactRepos />)
-      const nameHeadCell = screen.queryAllByTestId('head-cell')[0]
-      fireEvent.click(nameHeadCell)
-      expect(onSortChangeMock).toHaveBeenCalledWith('name', 'asc')
-      fireEvent.click(nameHeadCell)
-      expect(onSortChangeMock).toHaveBeenCalledWith('name', 'desc')
-    })
-
-    it('Should set default initial sort order as `desc` when new column is clicked to sort by', () => {
-      const onSortChangeMock = jest.fn()
-      ;(useReactRepos as jest.Mock).mockReturnValue({ ...defaultHookOutput, onSortChange: onSortChangeMock })
-      render(<ReactRepos />)
-      const [nameHeadCell, starsHeadCell] = screen.queryAllByTestId('head-cell')
-      fireEvent.click(nameHeadCell)
-      expect(onSortChangeMock).toHaveBeenCalledWith('name', 'asc')
-      fireEvent.click(starsHeadCell)
-      expect(onSortChangeMock).toHaveBeenCalledWith('stars', 'desc')
-    })
+  it('Should NOT show loading row when all content is loaded', async () => {
+    render(
+      <MockedProvider mocks={mocks({ repositories: queryRepositoriesResponse, hasNextPage: true })}>
+        <ReactRepos />
+      </MockedProvider>
+    )
+    const rows = await screen.findAllByTestId('table-row')
+    const loadMore = screen.queryByTestId('loading-row')
+    expect(rows).toHaveLength(10)
+    expect(loadMore).not.toBeInTheDocument()
   })
 
-  describe('LoadMore behaviour', () => {
-    it('Should NOT show `LoadMore` button if there are no results', () => {
-      ;(useReactRepos as jest.Mock).mockReturnValue({ ...defaultHookOutput })
-      render(<ReactRepos />)
-      expect(screen.queryByTestId('load-more')).not.toBeInTheDocument()
-    })
+  it('Should show no-results when repositories were not found', async () => {
+    render(
+      <MockedProvider mocks={mocks({ repositories: [], hasNextPage: false })}>
+        <ReactRepos />
+      </MockedProvider>
+    )
+    const noResults = await screen.findByTestId('no-results')
+    expect(noResults).toBeInTheDocument()
+  })
 
-    it('Should NOT show `LoadMore` if there are no more results based on `hasNextPage` value', () => {
-      ;(useReactRepos as jest.Mock).mockReturnValue({
-        ...defaultHookOutput,
-        repositoriesState: {
-          ...defaultHookOutput.repositoriesState,
-          repositories: repositoriesDefaultData
-        }
-      })
-      render(<ReactRepos />)
-      expect(screen.queryByTestId('load-more')).not.toBeInTheDocument()
-    })
+  it('Should NOT show no-results when repositories were found', () => {
+    render(
+      <MockedProvider mocks={mocks({ repositories: queryRepositoriesResponse, hasNextPage: true })}>
+        <ReactRepos />
+      </MockedProvider>
+    )
+    const noResults = screen.queryByTestId('no-results')
+    expect(noResults).not.toBeInTheDocument()
+  })
 
-    it('Should trigger `onLoadMore` button click', () => {
-      const onLoadMoreMock = jest.fn()
-      ;(useReactRepos as jest.Mock).mockReturnValue({
-        ...defaultHookOutput,
-        repositoriesState: {
-          ...defaultHookOutput.repositoriesState,
-          repositories: repositoriesDefaultData,
-          hasNextPage: true
-        },
-        onLoadMore: onLoadMoreMock
-      })
-      render(<ReactRepos />)
-      fireEvent.click(screen.getByTestId('load-more'))
-      expect(onLoadMoreMock).toHaveBeenCalled()
-    })
+  it('Should show total items when repositories were found', async () => {
+    render(
+      <MockedProvider mocks={mocks({ repositories: queryRepositoriesResponse, hasNextPage: true })}>
+        <ReactRepos />
+      </MockedProvider>
+    )
+    const totalItems = await screen.findByTestId('total-items')
+    expect(totalItems).toBeInTheDocument()
+  })
+
+  it('Should show empty total items when repositories were NOT found', async () => {
+    render(
+      <MockedProvider mocks={mocks({ repositories: [], hasNextPage: false })}>
+        <ReactRepos />
+      </MockedProvider>
+    )
+    const totalItems = await screen.findByTestId('total-items')
+    expect(totalItems.textContent).toEqual('')
   })
 })
