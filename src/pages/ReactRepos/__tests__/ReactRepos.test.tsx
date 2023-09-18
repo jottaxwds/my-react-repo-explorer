@@ -28,16 +28,10 @@ describe('ReactRepos page', () => {
   })
 
   describe('General behaviour', () => {
-    it('Should render without errors', () => {
-      ;(useReactRepos as jest.Mock).mockReturnValue({ ...defaultHookOutput })
-      render(<ReactRepos />)
-      expect(screen.getByTestId('react-repos')).toBeInTheDocument()
-    })
-
     it('Should show no-results message when results table is empty', () => {
       ;(useReactRepos as jest.Mock).mockReturnValue({ ...defaultHookOutput })
       render(<ReactRepos />)
-      expect(screen.getByTestId('no-results')).toBeInTheDocument()
+      expect(screen.queryByText('No Results')).toBeInTheDocument()
     })
 
     it('Should NOT show no-results message when results table is NOT empty', () => {
@@ -49,7 +43,7 @@ describe('ReactRepos page', () => {
         }
       })
       render(<ReactRepos />)
-      expect(screen.queryByTestId('no-results')).not.toBeInTheDocument()
+      expect(screen.queryByText('No Results')).not.toBeInTheDocument()
     })
 
     it('Shows an error message when there is an error', () => {
@@ -142,7 +136,6 @@ describe('ReactRepos page', () => {
         onLoadMore: onLoadMoreMock
       })
       render(<ReactRepos />)
-      expect(screen.queryByTestId('load-more')).toBeInTheDocument()
       fireEvent.click(screen.getByTestId('load-more'))
       expect(onLoadMoreMock).toHaveBeenCalled()
     })

@@ -1,12 +1,4 @@
 import { SortOrderType } from './ResultsTable'
-
-export interface Repository {
-  name: string
-  description: string
-  stargazers: number
-  forkCount: number
-}
-
 export interface RepositoriesState {
   repositories: Repo[]
   hasNextPage: boolean

@@ -20,6 +20,11 @@ const defaultRepositoriesState: RepositoriesState = {
   searchValue: ''
 }
 
+/**
+ * Search and sorting should be done by providing a queryString with the following format:
+ * `topic:<MAIN_TOPIC_FOR_SEARCH> <SEARCH_STRINGS> language:<LANGUAGE> sort:<SORT_BY>-<SORT_ORDER>
+ * [search reference](https://docs.github.com/en/graphql/reference/queries#search)
+ **/
 const queryString = ({ sortBy, sortOrder, searchValue }: QueryStringProps) =>
   `topic:ReactJS ${searchValue} language:javascript sort:${sortBy}-${sortOrder}`
 
