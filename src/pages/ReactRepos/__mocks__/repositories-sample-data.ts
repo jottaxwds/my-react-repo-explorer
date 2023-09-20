@@ -95,7 +95,7 @@ export const mocks = ({ repositories, hasNextPage, hasError = false }: GetMocksP
         {
           request: {
             query: REACT_REPOSITORIES_QUERY,
-            variables: { queryString: 'topic:ReactJS  language:javascript sort:repo-desc', first: 10 }
+            variables: { queryString: 'topic:ReactJS  language:javascript sort:name-asc', first: 10 }
           },
           errors: new Error('error')
         }
@@ -104,7 +104,7 @@ export const mocks = ({ repositories, hasNextPage, hasError = false }: GetMocksP
         {
           request: {
             query: REACT_REPOSITORIES_QUERY,
-            variables: { queryString: 'topic:ReactJS  language:javascript sort:repo-desc', first: 10 }
+            variables: { queryString: 'topic:ReactJS  language:javascript sort:name-asc', first: 10 }
           },
           result: {
             data: {

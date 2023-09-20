@@ -19,7 +19,7 @@ describe('useReactRepos', () => {
     renderHook(() => useReactRepos())
     expect(searchRepositoriesMock).toHaveBeenCalled()
     expect(searchRepositoriesMock).toHaveBeenCalledWith({
-      variables: { first: 10, queryString: 'topic:ReactJS  language:javascript sort:repo-desc' }
+      variables: { first: 10, queryString: 'topic:ReactJS  language:javascript sort:name-asc' }
     })
   })
 
@@ -68,7 +68,7 @@ describe('useReactRepos', () => {
     })
     expect(searchRepositoriesMock).toHaveBeenCalledTimes(2)
     expect(searchRepositoriesMock).toHaveBeenCalledWith({
-      variables: { first: 10, queryString: 'topic:ReactJS my repos language:javascript sort:repo-desc' }
+      variables: { first: 10, queryString: 'topic:ReactJS my repos language:javascript sort:name-asc' }
     })
   })
 })
