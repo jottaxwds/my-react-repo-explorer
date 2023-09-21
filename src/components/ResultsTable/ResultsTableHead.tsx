@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { TableHead, TableRow, TableSortLabel } from '@mui/material'
 import { ResultsTableHeadProps, SortOrderType } from '../../types/ResultsTable'
@@ -10,15 +10,27 @@ const ResultsTableHead = <DataItem extends Record<string, any>>({
   sortOrder: initSortOrder,
   onSortChange
 }: ResultsTableHeadProps<DataItem>) => {
-  const [sortBy, setSortBy] = useState<keyof DataItem | string>(initSortBy)
+  const [sortBy, setSortBy] = useState<string>(initSortBy)
   const [sortOrder, setSortOrder] = useState<SortOrderType>(initSortOrder ?? SortOrderType.DESC)
 
-  const handleSort = (columnId: string) => () => {
-    const isAsc = sortBy === columnId && sortOrder === SortOrderType.ASC
-    setSortOrder(isAsc ? SortOrderType.DESC : SortOrderType.ASC)
-    setSortBy(columnId)
-    onSortChange(columnId as string, sortOrder)
+  const getNewSortOrder = (newColumnId: string, prevSortOrder: SortOrderType) => {
+    let newSortOrder = prevSortOrder === SortOrderType.ASC ? SortOrderType.DESC : SortOrderType.ASC
+    if (sortBy !== newColumnId) {
+      newSortOrder = SortOrderType.ASC
+    }
+    return newSortOrder
   }
+
+  const handleSort = (columnId: string) => () => {
+    setSortOrder((prevSortOrder: SortOrderType) => getNewSortOrder(columnId, prevSortOrder))
+    if (columnId !== sortBy) {
+      setSortBy(columnId)
+    }
+  }
+
+  useEffect(() => {
+    onSortChange(sortBy, sortOrder)
+  }, [sortBy, sortOrder])
 
   return (
     <TableHead>

@@ -13,8 +13,8 @@ import { SortOrderType } from '../../../types/ResultsTable'
 const defaultRepositoriesState: RepositoriesState = {
   repositories: [],
   hasNextPage: true,
-  sortBy: 'repo',
-  sortOrder: SortOrderType.DESC,
+  sortBy: 'name',
+  sortOrder: SortOrderType.ASC,
   endCursor: null,
   totalItems: 0,
   searchValue: ''
