@@ -13,15 +13,19 @@ const ResultsTableHead = <DataItem extends Record<string, any>>({
   const [sortBy, setSortBy] = useState<string>(initSortBy)
   const [sortOrder, setSortOrder] = useState<SortOrderType>(initSortOrder ?? SortOrderType.DESC)
 
+  const getNewSortOrder = (newColumnId: string, prevSortOrder: SortOrderType) => {
+    let newSortOrder = prevSortOrder === SortOrderType.ASC ? SortOrderType.DESC : SortOrderType.ASC
+    if (sortBy !== newColumnId) {
+      newSortOrder = SortOrderType.ASC
+    }
+    return newSortOrder
+  }
+
   const handleSort = (columnId: string) => () => {
-    setSortOrder((prevSortOrder: SortOrderType) => {
-      let newSortOrder = prevSortOrder === SortOrderType.ASC ? SortOrderType.DESC : SortOrderType.ASC
-      if (sortBy !== columnId) {
-        newSortOrder = SortOrderType.ASC
-      }
-      return newSortOrder
-    })
-    setSortBy(columnId)
+    setSortOrder((prevSortOrder: SortOrderType) => getNewSortOrder(columnId, prevSortOrder))
+    if (columnId !== sortBy) {
+      setSortBy(columnId)
+    }
   }
 
   useEffect(() => {
